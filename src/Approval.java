@@ -145,18 +145,54 @@ public class Approval extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void acceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_acceptActionPerformed
-     
-        String accountNumber = ACCOUNTSFORAPPROVALDTM.getValueAt(ACCOUNTSFORAPPROVAL.getSelectedRow(), 0).toString();
+ String accountNumber = ACCOUNTSFORAPPROVALDTM.getValueAt(ACCOUNTSFORAPPROVAL.getSelectedRow(), 0).toString();
 
-// transfer the file to a temporary file
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader("accounts.csv"));
-            PrintWriter writer = new PrintWriter(new FileWriter("TemporaryFile.csv"));
-            String line;
-            
-            while ((line = reader.readLine())!=null) {
-                String[] accountDetails = line.split(",");
-                
+    // Write the approved account number to transactions.csv
+    try (PrintWriter writer = new PrintWriter(new FileWriter("transactions.csv", true))) {
+        writer.printf("%s,0.00%n", accountNumber); // Assuming the initial balance is 0.00
+    } catch (IOException ex) {
+        Logger.getLogger(Approval.class.getName()).log(Level.SEVERE, null, ex);
+    }
+
+    // Transfer the file to a temporary file
+    try {
+        BufferedReader reader = new BufferedReader(new FileReader("accounts.csv"));
+        PrintWriter writer = new PrintWriter(new FileWriter("TemporaryFile.csv"));
+        String line;
+
+        while ((line = reader.readLine()) != null) {
+            String[] accountDetails = line.split(",");
+
+            writer.append(String.format("%s,%s,%s,%s,%s,%s,%s,%s\n",
+                    accountDetails[0],
+                    accountDetails[1],
+                    accountDetails[2],
+                    accountDetails[3],
+                    accountDetails[4],
+                    accountDetails[5],
+                    accountDetails[6],
+                    accountDetails[7]));
+        }
+
+        reader.close();
+        writer.close();
+    } catch (FileNotFoundException ex) {
+        Logger.getLogger(EditProfile.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (IOException ex) {
+        Logger.getLogger(EditProfile.class.getName()).log(Level.SEVERE, null, ex);
+    }
+
+    // Transfer the temporary file to the original file
+    try {
+        BufferedReader reader = new BufferedReader(new FileReader("TemporaryFile.csv"));
+        PrintWriter writer = new PrintWriter(new FileWriter("accounts.csv"));
+        String line;
+
+        while ((line = reader.readLine()) != null) {
+            String[] accountDetails = line.split(",");
+
+            // Search for the account
+            if (!accountDetails[0].equals(accountNumber)) {
                 writer.append(String.format("%s,%s,%s,%s,%s,%s,%s,%s\n",
                         accountDetails[0],
                         accountDetails[1],
@@ -166,61 +202,29 @@ public class Approval extends javax.swing.JFrame {
                         accountDetails[5],
                         accountDetails[6],
                         accountDetails[7]));
+            } else {
+                // Edit the specific account to mark it as approved
+                writer.append(String.format("%s,%s,%s,%s,%s,%s,%s,APPROVED\n",
+                        accountDetails[0],
+                        accountDetails[1],
+                        accountDetails[2],
+                        accountDetails[3],
+                        accountDetails[4],
+                        accountDetails[5],
+                        accountDetails[6]
+                ));
             }
-            
-            reader.close();
-            writer.close();
-        } 
-        catch (FileNotFoundException ex) {
-        Logger.getLogger(EditProfile.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(EditProfile.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        // transfer the temporary file to original file 
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader("TemporaryFile.csv"));
-            PrintWriter writer = new PrintWriter(new FileWriter("accounts.csv"));
-            String line;
-            
-            while ((line = reader.readLine())!=null) {
-                String[] accountDetails = line.split(",");
-                
-                // Search for the account
-                if (!accountDetails[0].equals(accountNumber)) {
-                    writer.append(String.format("%s,%s,%s,%s,%s,%s,%s,%s\n",
-                            accountDetails[0],
-                            accountDetails[1],
-                            accountDetails[2],
-                            accountDetails[3],
-                            accountDetails[4],
-                            accountDetails[5],
-                            accountDetails[6],
-                            accountDetails[7]));
-                }
-                else {
-                    // edit the specific account
-                    writer.append(String.format("%s,%s,%s,%s,%s,%s,%s,APPROVED\n",
-                            accountDetails[0],
-                            accountDetails[1],
-                            accountDetails[2],
-                            accountDetails[3],
-                            accountDetails[4],
-                            accountDetails[5],
-                            accountDetails[6]
-                            ));
-                }
-            }
-            
-            reader.close();
-            writer.close();
-        } 
-        catch (FileNotFoundException ex) {
+
+        reader.close();
+        writer.close();
+    } catch (FileNotFoundException ex) {
         Logger.getLogger(EditProfile.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(EditProfile.class.getName()).log(Level.SEVERE, null, ex);
-        }
-         displayAccountsForApprovals();
+    } catch (IOException ex) {
+        Logger.getLogger(EditProfile.class.getName()).log(Level.SEVERE, null, ex);
+    }
+
+    displayAccountsForApprovals();
 
     }//GEN-LAST:event_acceptActionPerformed
 
