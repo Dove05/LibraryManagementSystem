@@ -21,9 +21,8 @@ public class ManageAccount extends javax.swing.JFrame {
         initComponents();
         
         // For the month spinner
-String[] months = new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
-SpinnerListModel monthModel = new SpinnerListModel(months);
-month.setModel(monthModel);
+SpinnerNumberModel monthModel = new SpinnerNumberModel(1, 1, 12, 1);
+        month.setModel(monthModel);
 
 // For the day spinner
 SpinnerNumberModel dayModel = new SpinnerNumberModel(1, 1, 31, 1);

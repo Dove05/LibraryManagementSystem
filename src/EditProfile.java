@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 
@@ -72,6 +73,12 @@ public class EditProfile extends javax.swing.JFrame {
             }
         });
         getContentPane().add(Fullname, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 150, 350, 30));
+
+        month.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                monthMouseClicked(evt);
+            }
+        });
         getContentPane().add(month, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 190, 80, 20));
         getContentPane().add(day, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 190, 80, -1));
         getContentPane().add(year, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 190, 80, -1));
@@ -295,6 +302,9 @@ public class EditProfile extends javax.swing.JFrame {
             
             reader.close();
             writer.close();
+            
+              // Show success message
+        JOptionPane.showMessageDialog(this, "Changes saved successfully.");
         } 
         catch (FileNotFoundException ex) {
         Logger.getLogger(EditProfile.class.getName()).log(Level.SEVERE, null, ex);
@@ -342,34 +352,13 @@ public class EditProfile extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_exitActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(EditProfile.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(EditProfile.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(EditProfile.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(EditProfile.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void monthMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_monthMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_monthMouseClicked
 
-        /* Create and display the form */
+   
+    public static void main(String args[]) {
+       
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new EditProfile(null).setVisible(true);
